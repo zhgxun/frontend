@@ -11,6 +11,7 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -27,36 +28,34 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
+        NavBar::begin([
+            'brandLabel' => '读书旅行编程',
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar-inverse navbar-fixed-top',
+            ],
+        ]);
+//        $menuItems = [
+//            ['label' => '读书', 'url' => ['/site/index', 'type' => 1]],
+//            ['label' => '旅行', 'url' => ['/site/index', 'type' => 2]],
+//            ['label' => 'PHP', 'url' => ['/site/index', 'type' => 3]],
+//        ];
+        $menuItems = \common\base\Navigation::getInstance()->getMenuItems();
+        if (Yii::$app->user->isGuest) {
+            //$menuItems[] = ['label' => '注册', 'url' => ['/site/signup']];
+            //$menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
+        } else {
+//            $menuItems[] = [
+//                'label' => '退出 (' . Yii::$app->user->identity->username . ')',
+//                'url' => ['/site/logout'],
+//                'linkOptions' => ['data-method' => 'post']
+//            ];
+        }
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'items' => $menuItems,
+        ]);
+        NavBar::end();
     ?>
 
     <div class="container">
@@ -70,9 +69,11 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left">
+            <small>&copy;<?php echo ' 2015 - ' . date('Y') ?> 读书旅行编程</small>
+            <small><a href="https://github.com/zhgxun" target="_blank">GitHub</a></small>
+        </p>
+        <p class="pull-right"><small><?php echo Yii::powered() ?></small></p>
     </div>
 </footer>
 
