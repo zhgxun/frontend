@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
         NavBar::begin([
-            'brandLabel' => '读书旅行编程',
+            'brandLabel' => '小步',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
@@ -70,7 +70,7 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">
-            <small>&copy;<?php echo ' 2015 - ' . date('Y') ?> 读书旅行编程</small>
+            <small>&copy;<?php echo ' 2015 - ' . date('Y') ?> 小步</small>
             <small><a href="https://github.com/zhgxun" target="_blank">GitHub</a></small>
         </p>
         <p class="pull-right"><small><?php echo Yii::powered() ?></small></p>
