@@ -9,7 +9,7 @@
 /* @var $generals */
 /* @var $links */
 
-$this->title = '读书旅行编程';
+$this->title = '小步';
 
 $this->registerCss('
     .article {
