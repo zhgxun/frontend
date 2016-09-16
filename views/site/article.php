@@ -12,7 +12,7 @@ use yii\helpers\Url;
         <!-- 标题(最长28个汉字,超过显示省略号)和概要 -->
         <div class="col-lg-12 col-md-12 col-xs-12">
             <h4>
-                <a href="<?php echo Url::to(['index', 'id' => $value['id'], 'type' => $value['type']]); ?>" target="_blank">
+                <a href="<?php echo Url::to(['view', 'id' => $value['id']]); ?>" target="_blank" rel="noopener">
                     <?php
                         $title = '';
                         if (mb_strlen($value['title'], 'utf-8') > 28) {

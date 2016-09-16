@@ -15,46 +15,28 @@ class SiteController extends Base
         // 首页文章列表,不做缓存
         $type = isset($_GET['type']) && intval($_GET['type']) ? intval($_GET['type']) : 1;
 
-        $total = 0;
-        $pages = '';
-        // 是否有文章ID存在
-        if (isset($_GET['id']) && intval($_GET['id'])) {
-            $articleId = intval($_GET['id']);
-            $article = \common\base\Article::getInstance()->getById($articleId);
-            if ($article) {
-                $articles[] = $article;
-                // 需要统计阅读次数
-                \common\models\Article::updateAllCounters(['readcount' => 1], ' `id` = :id', [
-                    ':id' => $articleId,
-                ]);
-            } else {
-                // 如果信息有误,清除参数,直接跳转
-                unset($_GET['id'], $_GET['type']);
-                return $this->redirect(['index']);
-            }
-        } else {
-            $query = \common\models\Article::find();
-            $query->where(' `status` != :status', [
-                ':status' => \common\base\Status::Delete,
-            ]);
-            $query->andWhere(' `type` = :type', [
-                ':type' => $type,
-            ]);
-            $total = $query->count();
-            $pageSize = 10;
-            $pager = new \common\base\Page();
-            $pager->pageName = 'page';
-            $pages = $pager->show($total, $pageSize);
-            $page = isset($_GET['page']) ? $_GET['page'] : 1;
-            $offset = $pageSize * ($page - 1);
-            if ($offset >= $total) {
-                $offset = $total;
-            };
-            $query->offset($offset);
-            $query->limit($pageSize);
-            $query->orderBy(' `id` DESC');
-            $articles = $query->asArray()->all();
-        }
+        $query = \common\models\Article::find();
+        $query->where(' `status` != :status', [
+            ':status' => \common\base\Status::Delete,
+        ]);
+        $query->andWhere(' `type` = :type', [
+            ':type' => $type,
+        ]);
+        $total = $query->count();
+        $pageSize = 10;
+        $pager = new \common\base\Page();
+        $pager->pageName = 'page';
+        $pages = $pager->show($total, $pageSize);
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $offset = $pageSize * ($page - 1);
+        if ($offset >= $total) {
+            $offset = $total;
+        };
+        $query->offset($offset);
+        $query->limit($pageSize);
+        $query->orderBy(' `id` DESC');
+        $articles = $query->asArray()->all();
+
         // 每日一语
         $sentence = \common\base\Sentence::getInstance()->getSentence();
         // 推荐阅读(技术类)
@@ -68,6 +50,26 @@ class SiteController extends Base
             'total' => $total, 'pages' => $pages, 'articles' => $articles, 'sentence' => $sentence,
             'techniques' => $techniques, 'generals' => $generals, 'links' => $links,
         ]);
+    }
+
+    /**
+     * 文章
+     * @param $id
+     * @return string|\yii\web\Response
+     */
+    public function actionView($id)
+    {
+        $articleId = intval($id);
+        $article = \common\base\Article::getInstance()->getById($articleId);
+        if (!$article) {
+            unset($type, $id);
+            return $this->redirect(['index']);
+        }
+        \common\models\Article::updateAllCounters(['readcount' => 1], ' `id` = :id', [
+            ':id' => $articleId,
+        ]);
+
+        return $this->render('view', ['article' => $article]);
     }
 
     /**

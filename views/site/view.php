@@ -1,16 +1,16 @@
 <?php
 
 /* @var $this \yii\web\View */
-/* @var $articles */
+/* @var $article */
 
-$this->title = $articles['title'];
+$this->title = $article['title'];
 
 ?>
-<h4><?php echo $articles['title']; ?></h4>
-<p class="min-height">
-    <small><?php echo \common\base\Navigation::getInstance()->getNameById($articles['type']); ?></small>
-    <small><?php echo \common\base\User::getInstance()->getNameById($articles['userid']); ?></small>
-    <small><?php echo $articles['readcount'] ? $articles['readcount'] : 0; ?></small>
-    <small><?php echo date('Y-m-d H:i', $articles['ctime']); ?></small>
+<h4><?php echo $article['title']; ?></h4>
+<p>
+    <small><?php echo \common\base\Navigation::getInstance()->getNameById($article['type']); ?></small>
+    <small><?php echo \common\base\User::getInstance()->getNameById($article['userid']); ?></small>
+    <small><?php echo $article['readcount'] ? $article['readcount'] : 0; ?></small>
+    <small><?php echo date('Y-m-d H:i', $article['ctime']); ?></small>
 </p>
-<div><?php echo $articles['content']; ?></div>
+<div><?php echo $article['content']; ?></div>

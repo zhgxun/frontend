@@ -22,14 +22,7 @@ $this->registerCss('
         <!-- 文章列表区域 -->
         <div class="col-lg-8 col-md-8 col-xs-12">
             <?php
-                \yii\widgets\Pjax::begin();
-                $template = 'article';
-                if (count($articles) <= 1 && isset($_GET['id']) && intval($_GET['id'])) {
-                    $template = 'view';
-                    $articles = $articles[0];
-                }
-                echo $this->render($template, ['articles' => $articles, 'pages' => $pages]);
-                \yii\widgets\Pjax::end();
+                echo $this->render('article', ['articles' => $articles, 'pages' => $pages]);
             ?>
         </div>
 
