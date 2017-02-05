@@ -73,6 +73,39 @@ class SiteController extends Base
     }
 
     /**
+     * 搜索结果页
+     * @return string
+     */
+    public function actionSearch()
+    {
+        $request = Yii::$app->getRequest()->get();
+
+        $query = \common\models\Article::find();
+        $query->where(' `status` != :status', [
+            ':status' => \common\base\Status::Delete,
+        ]);
+        if (isset($request['keyword']) && trim($request['keyword'])) {
+            $query->andFilterWhere(['like', 'title', trim(strip_tags($request['keyword']))]);
+        }
+        $total = $query->count();
+        $pageSize = 10;
+        $pager = new \common\base\Page();
+        $pager->pageName = 'page';
+        $pages = $pager->show($total, $pageSize);
+        $page = isset($request['page']) ? $request['page'] : 1;
+        $offset = $pageSize * ($page - 1);
+        if ($offset >= $total) {
+            $offset = $total;
+        };
+        $query->offset($offset);
+        $query->limit($pageSize);
+        $query->orderBy(' `id` DESC');
+        $articles = $query->asArray()->all();
+
+        return $this->render('article', ['articles' => $articles, 'pages' => $pages]);
+    }
+
+    /**
      * 登陆
      * @return mixed
      * @throws \yii\web\NotFoundHttpException

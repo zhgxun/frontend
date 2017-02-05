@@ -22,11 +22,15 @@ use yii\helpers\Url;
                     ?>
                 </a>
             </h4>
-            <p class="min-height">
+            <p class="min-height text-success">
                 <small><?php echo \common\base\Navigation::getInstance()->getNameById($value['type']); ?></small>
                 <small><?php echo \common\base\User::getInstance()->getNameById($value['userid']); ?></small>
                 <small><?php echo $value['readcount'] ? $value['readcount'] : 0; ?></small>
                 <small><?php echo date('Y-m-d H:i', $value['ctime']); ?></small>
+            </p>
+
+            <p class="text-info">
+                <?php echo $value['summary']; ?>
             </p>
         </div>
     </div>

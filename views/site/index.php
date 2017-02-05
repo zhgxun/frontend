@@ -16,6 +16,7 @@ $this->registerCss('
         min-height : 80px;
     }
 ');
+
 ?>
 <div class="site-index">
     <div class="row">

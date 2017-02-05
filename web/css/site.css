@@ -140,3 +140,7 @@ a.desc:after {
     color:#fff;
     background-color: #5c4;
 }
+
+.search-title {
+    margin: 8px;
+}

@@ -9,8 +9,11 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use yii\bootstrap\ActiveForm;
 
 AppAsset::register($this);
+
+$keyword = isset($_GET['keyword']) && trim(strip_tags($_GET['keyword'])) ? trim(strip_tags($_GET['keyword'])) : '请输入标题';
 
 ?>
 <?php $this->beginPage() ?>
@@ -55,6 +58,23 @@ AppAsset::register($this);
             'options' => ['class' => 'navbar-nav navbar-left'],
             'items' => $menuItems,
         ]);
+
+        // 搜索设计，临时方案
+        ActiveForm::begin([
+            'layout' => 'inline',
+            'action' => \yii\helpers\Url::to('site/search', true),
+            'method' => 'get',
+            'options' => ['class' => 'pull-right search-title'],
+        ]);
+        echo '
+            <div class="form-group">
+                <label class="sr-only" for="searchTitle">请输入标题</label>
+                <input type="text" class="form-control" name="keyword" id="searchTitle" placeholder="' . $keyword . '">
+            </div>
+            <input type="submit" class="btn btn-default" value="搜索">
+        ';
+        ActiveForm::end();
+
         NavBar::end();
     ?>
 
