@@ -10,7 +10,6 @@ class Base extends Controller
     {
         parent::init();
         //记录请求详细日志
-        //记录请求详细日志
         $ip = \Yii::$app->getRequest()->getUserIP();
         $method = \Yii::$app->getRequest()->getMethod();
         $userHost = \Yii::$app->getRequest()->getUserHost();
@@ -41,6 +40,7 @@ class Base extends Controller
         unset($requestLog);
         try {
             $requestLog = [
+                'date' => date('Y-m-d H:i:s'),
                 'type' => 'frontend',
                 'ip' => $ip,
                 'method' => $method,
