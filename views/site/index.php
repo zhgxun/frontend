@@ -71,10 +71,10 @@ $this->registerCss('
                 </div>
             <?php } ?>
 
-            <!-- 友情链接 -->
+            <!-- 快速链接 -->
             <?php if ($links) { ?>
                 <div class="link">
-                    <h5>友情链接</h5>
+                    <h5>快速链接</h5>
                     <ul class="list-inline">
                     <?php foreach ($links as $link): ?>
                         <li>
