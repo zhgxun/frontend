@@ -23,10 +23,10 @@ class SiteController extends Base
             ':type' => $type,
         ]);
         $total = $query->count();
-        $pageSize = 10;
+        $pageSize = 8;
         $pager = new \common\base\Page();
         $pager->pageName = 'page';
-        $pages = $pager->show($total, $pageSize);
+        $pages = $pager->show($total, $pageSize, 2, 3);
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $offset = $pageSize * ($page - 1);
         if ($offset >= $total) {
@@ -37,18 +37,8 @@ class SiteController extends Base
         $query->orderBy(' `id` DESC');
         $articles = $query->asArray()->all();
 
-        // 每日一语
-        $sentence = \common\base\Sentence::getInstance()->getSentence();
-        // 推荐阅读(技术类)
-        $techniques = \common\base\Recommend::getInstance()->getList(1);
-        // 推荐阅读(普通类)
-        $generals = \common\base\Recommend::getInstance()->getList(2);
-        // 友情链接
-        $links = \common\base\Link::getInstance()->getList();
-
         return $this->render('index', [
-            'total' => $total, 'pages' => $pages, 'articles' => $articles, 'sentence' => $sentence,
-            'techniques' => $techniques, 'generals' => $generals, 'links' => $links,
+            'total' => $total, 'pages' => $pages, 'articles' => $articles,
         ]);
     }
 
@@ -70,39 +60,6 @@ class SiteController extends Base
         ]);
 
         return $this->render('view', ['article' => $article]);
-    }
-
-    /**
-     * 搜索结果页
-     * @return string
-     */
-    public function actionSearch()
-    {
-        $request = Yii::$app->getRequest()->get();
-
-        $query = \common\models\Article::find();
-        $query->where(' `status` != :status', [
-            ':status' => \common\base\Status::Delete,
-        ]);
-        if (isset($request['keyword']) && trim($request['keyword'])) {
-            $query->andFilterWhere(['like', 'title', trim(strip_tags($request['keyword']))]);
-        }
-        $total = $query->count();
-        $pageSize = 10;
-        $pager = new \common\base\Page();
-        $pager->pageName = 'page';
-        $pages = $pager->show($total, $pageSize);
-        $page = isset($request['page']) ? $request['page'] : 1;
-        $offset = $pageSize * ($page - 1);
-        if ($offset >= $total) {
-            $offset = $total;
-        };
-        $query->offset($offset);
-        $query->limit($pageSize);
-        $query->orderBy(' `id` DESC');
-        $articles = $query->asArray()->all();
-
-        return $this->render('article', ['articles' => $articles, 'pages' => $pages]);
     }
 
     /**

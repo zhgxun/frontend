@@ -59,22 +59,6 @@ $keyword = isset($_GET['keyword']) && trim(strip_tags($_GET['keyword'])) ? trim(
             'items' => $menuItems,
         ]);
 
-        // 搜索设计，临时方案
-        ActiveForm::begin([
-            'layout' => 'inline',
-            'action' => \yii\helpers\Url::to('site/search', true),
-            'method' => 'get',
-            'options' => ['class' => 'pull-right search-title'],
-        ]);
-        echo '
-            <div class="form-group">
-                <label class="sr-only" for="searchTitle">请输入标题</label>
-                <input type="text" class="form-control" name="keyword" id="searchTitle" placeholder="' . $keyword . '">
-            </div>
-            <input type="submit" class="btn btn-default" value="搜索">
-        ';
-        ActiveForm::end();
-
         NavBar::end();
     ?>
 

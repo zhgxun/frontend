@@ -1,91 +1,45 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $total */
 /* @var $pages */
 /* @var $articles */
-/* @var $sentence */
-/* @var $techniques */
-/* @var $generals */
-/* @var $links */
 
 $this->title = '小步';
 
-$this->registerCss('
-    .article {
-        min-height : 80px;
-    }
-');
+use yii\helpers\Url;
 
 ?>
 <div class="site-index">
     <div class="row">
-        <!-- 文章列表区域 -->
-        <div class="col-lg-8 col-md-8 col-xs-12">
-            <?php
-                echo $this->render('article', ['articles' => $articles, 'pages' => $pages]);
-            ?>
-        </div>
+        <?php foreach ($articles as $value): ?>
+            <div class="center-block">
+                <!-- 标题(最长28个汉字,超过显示省略号)和概要 -->
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    <h3>
+                        <a href="<?php echo Url::to(['view', 'id' => $value['id']]); ?>" rel="noopener">
+                            <?php
+                            $title = '';
+                            if (mb_strlen($value['title'], 'utf-8') > 28) {
+                                $title = mb_substr($value['title'], 0, 28, 'utf-8');
+                            }
+                            echo $title ? "{$title}..." : $value['title'];
+                            ?>
+                        </a>
+                    </h3>
+                    <p class="text-success">
+                        <small><?php echo \common\base\Navigation::getInstance()->getNameById($value['type']); ?></small>
+                        <small><?php echo \common\base\User::getInstance()->getNameById($value['userid']); ?></small>
+                        <small><?php echo $value['readcount'] ? $value['readcount'] : 0; ?></small>
+                        <small><?php echo date('Y-m-d', $value['ctime']); ?></small>
+                    </p>
 
-        <!-- 右边框内容区域 -->
-        <div class="col-lg-4 col-md-4 col-xs-12">
-            <!-- 每日一语 -->
-            <?php if ($sentence) { ?>
-                <div class="sentence">
-                    <blockquote>
-                        <p class="text-primary"><?php echo $sentence['title']; ?></p>
-                        <footer><?php echo $sentence['author']; ?> <cite title="Source Title"><?php echo $sentence['quote']; ?></cite></footer>
-                    </blockquote>
+                    <p class="text-info">
+                        <?php echo $value['summary']; ?>
+                    </p>
                 </div>
-            <?php } ?>
-
-            <!-- 推荐阅读(技术类) -->
-            <?php if ($techniques) { ?>
-                <div class="read-technology">
-                    <h5>推荐阅读(技术)</h5>
-                    <ol>
-                        <?php foreach ($techniques as $technique): ?>
-                            <li>
-                                <a href="<?php echo $technique['url']; ?>" target="_blank">
-                                    <?php echo $technique['title']; ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ol>
-                </div>
-            <?php } ?>
-
-            <!-- 推荐阅读(非技术类) -->
-            <?php if ($generals) { ?>
-                <div class="read-feelings">
-                    <h5>推荐阅读(普通)</h5>
-                    <ol>
-                        <?php foreach ($generals as $general): ?>
-                            <li>
-                                <a href="<?php echo $general['url']; ?>" target="_blank">
-                                    <?php echo $general['title']; ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ol>
-                </div>
-            <?php } ?>
-
-            <!-- 快速链接 -->
-            <?php if ($links) { ?>
-                <div class="link">
-                    <h5>快速链接</h5>
-                    <ul class="list-inline">
-                    <?php foreach ($links as $link): ?>
-                        <li>
-                            <a href="<?php echo $link['url']; ?>" target="_blank">
-                                <?php echo $link['title']; ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php } ?>
-        </div>
+            </div>
+            <p></p>
+        <?php endforeach; ?>
+        <?php echo $pages; ?>
     </div>
 </div>
